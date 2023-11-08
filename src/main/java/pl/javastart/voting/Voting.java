@@ -18,7 +18,10 @@ public class Voting {
 
         VotingResult votingResult = voting.executeVoting(voters, new Scanner(System.in));
         votingResult.printResults();
+
+        votingResult.printVoteForVoter("Jan Kowalski");
         votingResult.printVoteForVoter("Zigniew Siobro");
+        votingResult.printVoteForVoter("Zbyszek Stonoga");
     }
 
     /**
@@ -27,8 +30,55 @@ public class Voting {
      * Metoda powinna pobrać głos dla każdego przekazanego głosującego i zapisać wyniki głosowania do VotingResult
      */
     VotingResult executeVoting(List<String> voters, Scanner scanner) {
+        List<Vote> results = new ArrayList<>();
+        Boolean vote;
+        int numberOfVotesFor = 0;
+        int numberOfVotesAgainst = 0;
+        int numberOfVotesAbstain = 0;
 
-        return null; // to możesz (a nawet powinieneś/powinnaś) zmienić :)
+        if (!voters.isEmpty()) {
+            for (String voter : voters) {
+                System.out.printf("Jak głosuje %s? (z - za, p - przeciw, w - wstrzymanie się)%n", voter);
+                vote = readVote(scanner);
+                results.add(new Vote(voter, vote));
+
+                /*/
+                Poniżej "trick" optymalizacyjny, dzięki któremu nie trzeba później do statystyk
+                "za", "przeciw" i "wstrzymał się" skanować za każdym razem całej listy
+                 */
+                if (vote == null) {
+                    numberOfVotesAbstain++;
+                } else if (vote.equals(false)) {
+                    numberOfVotesAgainst++;
+                } else if (vote.equals(true)) {
+                    numberOfVotesFor++;
+                }
+            }
+        }
+
+        return new VotingResult(results, numberOfVotesFor, numberOfVotesAgainst, numberOfVotesAbstain);
     }
 
+    private Boolean readVote(Scanner scanner) {
+        String vote;
+
+        while (true) {
+            vote = scanner.nextLine();
+
+            switch (vote) {
+                case "z" -> {
+                    return true;
+                }
+                case "p" -> {
+                    return false;
+                }
+                case "w" -> {
+                    return null;
+                }
+                default -> {
+                    System.out.println("Zagłosowałeś niepoprawnie. Spróbuj ponownie (z - za, p - przeciw, w - wstrzymanie się)");
+                }
+            }
+        }
+    }
 }
