@@ -18,7 +18,10 @@ public class Voting {
 
         VotingResult votingResult = voting.executeVoting(voters, new Scanner(System.in));
         votingResult.printResults();
+
+        votingResult.printVoteForVoter("Jan Kowalski");
         votingResult.printVoteForVoter("Zigniew Siobro");
+        votingResult.printVoteForVoter("ZbyszeG Stonoga");
     }
 
     /**
@@ -27,8 +30,40 @@ public class Voting {
      * Metoda powinna pobrać głos dla każdego przekazanego głosującego i zapisać wyniki głosowania do VotingResult
      */
     VotingResult executeVoting(List<String> voters, Scanner scanner) {
+        List<Vote> results = new ArrayList<>();
+        Boolean vote;
 
-        return null; // to możesz (a nawet powinieneś/powinnaś) zmienić :)
+        if (!voters.isEmpty()) {
+            for (String voter : voters) {
+                System.out.printf("Jak głosuje %s? (z - za, p - przeciw, w - wstrzymanie się)%n", voter);
+                vote = readVote(scanner);
+                results.add(new Vote(voter, vote));
+            }
+        }
+
+        return new VotingResult(results);
     }
 
+    private Boolean readVote(Scanner scanner) {
+        String vote;
+
+        while (true) {
+            vote = scanner.nextLine();
+
+            switch (vote) {
+                case "z" -> {
+                    return true;
+                }
+                case "p" -> {
+                    return false;
+                }
+                case "w" -> {
+                    return null;
+                }
+                default -> {
+                    System.out.println("Zagłosowałeś niepoprawnie. Spróbuj ponownie (z - za, p - przeciw, w - wstrzymanie się)");
+                }
+            }
+        }
+    }
 }

@@ -1,21 +1,12 @@
 package pl.javastart.voting;
 
 // klasa pomocnicza, możesz ją dowolnie zmieniać, albo usunąć
-public class Vote {
+public record Vote(String voter, Boolean vote) {
 
-    private String voter;
-    private Boolean vote; // true - ZA, false - PRZECIW, null - wstrzymanie się
+    @Override
+    public String toString() {
+        String voteResult = (vote == null) ? "WSTRZYMAŁ SIĘ" : (vote.equals(true) ? "ZA" : "PRZECIW");
 
-    public Vote(String voter, Boolean vote) {
-        this.voter = voter;
-        this.vote = vote;
-    }
-
-    public String getVoter() {
-        return voter;
-    }
-
-    public Boolean getVote() {
-        return vote;
+        return voter + ": " + voteResult;
     }
 }

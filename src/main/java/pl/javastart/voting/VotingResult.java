@@ -1,9 +1,29 @@
 package pl.javastart.voting;
 
+import java.util.List;
+
 /**
  * Możesz dodać kolejne metody i pola do klasy. Nie zmieniaj istniejących metod.
  */
 public class VotingResult {
+    private final List<Vote> results;
+    private int numberOfVotesFor;
+    private int numberOfVotesAgainst;
+    private int numberOfVotesAbstain;
+
+    public VotingResult(List<Vote> results) {
+        this.results = results;
+
+        for (Vote result : results) {
+            if (result.vote() == null) {
+                numberOfVotesAbstain++;
+            } else if (result.vote().equals(false)) {
+                numberOfVotesAgainst++;
+            } else if (result.vote().equals(true)) {
+                numberOfVotesFor++;
+            }
+        }
+    }
 
     /**
      * Metoda powinna drukować wyniki głosowania w takiej postaci:
@@ -13,6 +33,21 @@ public class VotingResult {
      */
     public void printResults() {
         // metoda powinna drukować wyniki głosowania
+        if (results.isEmpty()) {
+            System.out.println("Nikt nie wziął udziału w głosowaniu.");
+            return;
+        }
+
+        int totalNumberOfVotes = numberOfVotesFor + numberOfVotesAgainst + numberOfVotesAbstain;
+        System.out.printf("""
+                        Głosów za: %.2f%%
+                        Głosów przeciw: %.2f%%
+                        Wstrzymało się: %.2f%%
+
+                        """,
+                (double) numberOfVotesFor / totalNumberOfVotes * 100,
+                (double) numberOfVotesAgainst / totalNumberOfVotes * 100,
+                (double) numberOfVotesAbstain / totalNumberOfVotes * 100);
     }
 
     /**
@@ -22,6 +57,18 @@ public class VotingResult {
      * Nie zmieniaj sygnatury tej metody!
      */
     public void printVoteForVoter(String voterName) {
+        if (results.isEmpty()) {
+            System.out.println("Nikt nie wziął udziału w głosowaniu.");
+            return;
+        }
 
+        for (Vote result : results) {
+            if (result.voter().equals(voterName)) {
+                System.out.println(result);
+                return;     // zakładam, że w liście żaden głosujący nie pojawi się więcej niż raz
+            }
+        }
+
+        System.out.println(voterName + " nie został znaleziony w liście głosujących.");
     }
 }
