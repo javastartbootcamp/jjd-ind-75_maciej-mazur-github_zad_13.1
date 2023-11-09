@@ -21,7 +21,7 @@ public class Voting {
 
         votingResult.printVoteForVoter("Jan Kowalski");
         votingResult.printVoteForVoter("Zigniew Siobro");
-        votingResult.printVoteForVoter("Zbyszek Stonoga");
+        votingResult.printVoteForVoter("ZbyszeG Stonoga");
     }
 
     /**

@@ -33,6 +33,11 @@ public class VotingResult {
      */
     public void printResults() {
         // metoda powinna drukować wyniki głosowania
+        if (results.isEmpty()) {
+            System.out.println("Nikt nie wziął udziału w głosowaniu.");
+            return;
+        }
+
         int totalNumberOfVotes = numberOfVotesFor + numberOfVotesAgainst + numberOfVotesAbstain;
         System.out.printf("""
                         Głosów za: %.2f%%
@@ -52,11 +57,18 @@ public class VotingResult {
      * Nie zmieniaj sygnatury tej metody!
      */
     public void printVoteForVoter(String voterName) {
+        if (results.isEmpty()) {
+            System.out.println("Nikt nie wziął udziału w głosowaniu.");
+            return;
+        }
+
         for (Vote result : results) {
             if (result.voter().equals(voterName)) {
                 System.out.println(result);
                 return;     // zakładam, że w liście żaden głosujący nie pojawi się więcej niż raz
             }
         }
+
+        System.out.println(voterName + " nie został znaleziony w liście głosujących.");
     }
 }
