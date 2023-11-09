@@ -7,15 +7,22 @@ import java.util.List;
  */
 public class VotingResult {
     private final List<Vote> results;
-    private final int numberOfVotesFor;
-    private final int numberOfVotesAgainst;
-    private final int numberOfVotesAbstain;
+    private int numberOfVotesFor;
+    private int numberOfVotesAgainst;
+    private int numberOfVotesAbstain;
 
-    public VotingResult(List<Vote> results, int numberOfVotesFor, int numberOfVotesAgainst, int numberOfVotesAbstain) {
+    public VotingResult(List<Vote> results) {
         this.results = results;
-        this.numberOfVotesFor = numberOfVotesFor;
-        this.numberOfVotesAgainst = numberOfVotesAgainst;
-        this.numberOfVotesAbstain = numberOfVotesAbstain;
+
+        for (Vote result : results) {
+            if (result.vote() == null) {
+                numberOfVotesAbstain++;
+            } else if (result.vote().equals(false)) {
+                numberOfVotesAgainst++;
+            } else if (result.vote().equals(true)) {
+                numberOfVotesFor++;
+            }
+        }
     }
 
     /**
@@ -46,7 +53,7 @@ public class VotingResult {
      */
     public void printVoteForVoter(String voterName) {
         for (Vote result : results) {
-            if (result.getVoter().equals(voterName)) {
+            if (result.voter().equals(voterName)) {
                 System.out.println(result);
                 return;     // zakładam, że w liście żaden głosujący nie pojawi się więcej niż raz
             }

@@ -32,31 +32,16 @@ public class Voting {
     VotingResult executeVoting(List<String> voters, Scanner scanner) {
         List<Vote> results = new ArrayList<>();
         Boolean vote;
-        int numberOfVotesFor = 0;
-        int numberOfVotesAgainst = 0;
-        int numberOfVotesAbstain = 0;
 
         if (!voters.isEmpty()) {
             for (String voter : voters) {
                 System.out.printf("Jak głosuje %s? (z - za, p - przeciw, w - wstrzymanie się)%n", voter);
                 vote = readVote(scanner);
                 results.add(new Vote(voter, vote));
-
-                /*/
-                Poniżej "trick" optymalizacyjny, dzięki któremu nie trzeba później do statystyk
-                "za", "przeciw" i "wstrzymał się" skanować za każdym razem całej listy
-                 */
-                if (vote == null) {
-                    numberOfVotesAbstain++;
-                } else if (vote.equals(false)) {
-                    numberOfVotesAgainst++;
-                } else if (vote.equals(true)) {
-                    numberOfVotesFor++;
-                }
             }
         }
 
-        return new VotingResult(results, numberOfVotesFor, numberOfVotesAgainst, numberOfVotesAbstain);
+        return new VotingResult(results);
     }
 
     private Boolean readVote(Scanner scanner) {
